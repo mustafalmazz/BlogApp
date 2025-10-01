@@ -1,3 +1,6 @@
+using BlogApp.Data.Concrete.EfCore;
+using Microsoft.EntityFrameworkCore;
+
 namespace BlogApp
 {
     public class Program
@@ -9,7 +12,14 @@ namespace BlogApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<BlogContext>(options =>
+            {
+                var config = builder.Configuration;
+                var connectionString = config.GetConnectionString("sql_connection");
+                options.UseSqlite(connectionString);
+            });
             var app = builder.Build();
+            SeedData.TestVerileriniDoldur(app);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
