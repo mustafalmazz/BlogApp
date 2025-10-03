@@ -1,5 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<Tag>
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="cart-title mb-0">Tags</h5>
+    </div>
+    <div class="card-body">
+        <ul class="list-inline d-flex flex-wrap gap-2">
+            @foreach (var item in Model)
+            {
+                <li class="list-inline-item">
+                    <a href="/posts/tag/@item.Url" class=" btn btn-outline-secondary btn-sm">#@item.Text</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

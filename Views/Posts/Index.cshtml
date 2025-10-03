@@ -14,9 +14,9 @@
                             <img src="~/img/@item.Image" class="img-fluid rounded" alt="" />
                         </div>
                         <div class="col-8">
-                            <h5><a href="#" class="btn btn-link fw-bold">@item.Title</a></h5>
+                            <h5><a href="/posts/@item.Url" class="btn-link fw-bold" style="text-decoration:none;">@item.Title</a></h5>
                             <p>@item.Content</p>
-                            <a href="#" class="badge badge-danger bg-opacity-10 text-danger mb-2 fw-bold">Web Development</a>
+                            <a href="#" class="badge bg-danger bg-opacity-10 text-danger mb-2 fw-bold">Web Development</a>
                         </div>
                     </div>
 
@@ -34,21 +34,9 @@
         </div>
     </div>
     <div class="col-lg-4">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="cart-title">Tags</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-inline d-flex flex-wrap gap-2">
-                    @foreach (var item in Model.Tags)
-                    {
-                        <li class=" btn btn-outline-secondary btn-sm">#@item.Text</li>
-                    }
-                </ul>
-            </div>
-        </div>
+        @await Component.InvokeAsync("TagsMenu")
+        @await Component.InvokeAsync("NewPosts")
 
     </div>
-
 </div>
 

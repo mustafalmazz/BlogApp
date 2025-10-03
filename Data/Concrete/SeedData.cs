@@ -17,11 +17,11 @@ namespace BlogApp.Data.Concrete.EfCore
                 if (!context.Tags.Any())
                 {
                     context.Tags.AddRange(
-                        new Entity.Tag { Text = "Web Programlama"},
-                        new Entity.Tag { Text = "Backend"},
-                        new Entity.Tag { Text = "Frontend"},
-                        new Entity.Tag { Text = "Fullstack"},
-                        new Entity.Tag { Text = "php"}
+                        new Entity.Tag { Text = "Web Programlama",Url = "Web-Programlama"},
+                        new Entity.Tag { Text = "Backend", Url = "Backend" },
+                        new Entity.Tag { Text = "Frontend", Url = "Frontend" },
+                        new Entity.Tag { Text = "Fullstack", Url = "Fullstack" },
+                        new Entity.Tag { Text = "php", Url = "php" }
                      );
                     context.SaveChanges();
                 }
@@ -41,9 +41,10 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "asp .net core",
                         Content = "asp .net core dersleri",
+                        Url = "asp-net-core",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-10),
-                        Tags = context.Tags.Take(3).ToList(),
+                        Tags = context.Tags.Take(4).ToList(),
                         Image = "1.png",
                         UserId = 1
                     },
@@ -51,9 +52,10 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "Java",
                         Content = "Java dersleri",
+                        Url = "Java",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-20),
-                        Tags = context.Tags.Take(2).ToList(),
+                        Tags = context.Tags.Take(4).ToList(),
                         Image = "2.jpg",
                         UserId = 1
                     },
@@ -61,6 +63,29 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "React.js",
                         Content = "React.js dersleri",
+                        Url = "react.js",
+                        IsActive = true,
+                        PublishedOn = DateTime.Now.AddDays(-5),
+                        Tags = context.Tags.Take(4).ToList(),
+                        Image = "3.jpg",
+                        UserId = 1
+                    },
+                    new Entity.Post
+                    {
+                        Title = "MongoDb",
+                        Content = "MongoDb dersleri",
+                        Url = "mongodb",
+                        IsActive = true,
+                        PublishedOn = DateTime.Now.AddDays(-5),
+                        Tags = context.Tags.Take(4).ToList(),
+                        Image = "3.jpg",
+                        UserId = 1
+                    },
+                    new Entity.Post
+                    {
+                        Title = "Angular",
+                        Content = "Angular dersleri",
+                        Url = "angular",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),
                         Tags = context.Tags.Take(4).ToList(),

@@ -3,6 +3,7 @@ using BlogApp.Data.Abstract;
 using BlogApp.Data.Concrete.EfCore;
 using BlogApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp.Controllers
 {
@@ -15,14 +16,23 @@ namespace BlogApp.Controllers
             _postRepository = repository;
             _tagRepository = tagRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string tagName)
         {
-            var viewModel = new PostViewModel
+            var posts = _postRepository.Posts.Where(i => i.IsActive);
+
+            if (!string.IsNullOrEmpty(tagName))
             {
-                Posts = _postRepository.Posts.ToList(),
-                Tags = _tagRepository.Tags.ToList() 
-            };
-            return View(viewModel);
+                posts = posts.Where(x => x.Tags.Any(t => t.Url == tagName));
+            }
+
+            return View(new PostViewModel { Posts = await posts.ToListAsync() });
+        }
+
+        public async Task<IActionResult> DetailsAsync(/*int id*/ string url)
+        {
+            var model = await _postRepository.Posts.FirstOrDefaultAsync(a=>a.Url == url);
+            return View(model);
         }
     }
 }
+

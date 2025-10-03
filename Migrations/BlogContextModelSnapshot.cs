@@ -90,6 +90,9 @@ namespace BlogApp.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("TagId");
 
                     b.ToTable("Tags");

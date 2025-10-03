@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApp.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20251002121047_New")]
-    partial class New
+    [Migration("20251003113215_UrlPropAdded")]
+    partial class UrlPropAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,9 @@ namespace BlogApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
                         .HasColumnType("TEXT");
 
                     b.HasKey("TagId");

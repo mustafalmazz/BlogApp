@@ -1,18 +1,19 @@
 ﻿using BlogApp.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp.ViewComponents
 {
     public class TagsMenu : ViewComponent
     {
         private ITagRepository _tagRepository;
-        public TagsMenu(ITagRepository _tagRepository)
+        public TagsMenu(ITagRepository tagRepository)
         {
-            _tagRepository = _tagRepository;
+            _tagRepository = tagRepository;
         }
-        public IViewComponentResult Invoke()
+        public  async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(_tagRepository.Tags.ToList());
+            return View( await _tagRepository.Tags.ToListAsync());
         }
     }
 }
