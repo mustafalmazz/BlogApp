@@ -1,4 +1,5 @@
-﻿using BlogApp.Entity;
+﻿using BlogApp.Data.Abstract;
+using BlogApp.Entity;
 
 namespace BlogApp.Data.Concrete.EfCore
 {

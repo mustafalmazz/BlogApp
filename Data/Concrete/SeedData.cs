@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BlogApp.Entity;
+using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using System.Reflection;
 
 namespace BlogApp.Data.Concrete.EfCore
 {
@@ -17,20 +19,21 @@ namespace BlogApp.Data.Concrete.EfCore
                 if (!context.Tags.Any())
                 {
                     context.Tags.AddRange(
-                        new Entity.Tag { Text = "Web Programlama",Url = "Web-Programlama"},
-                        new Entity.Tag { Text = "Backend", Url = "Backend" },
-                        new Entity.Tag { Text = "Frontend", Url = "Frontend" },
-                        new Entity.Tag { Text = "Fullstack", Url = "Fullstack" },
-                        new Entity.Tag { Text = "php", Url = "php" }
+                        new Entity.Tag { Text = "Web Programlama", Url = "Web-Programlama", Color = Entity.TagColors.warning },
+                        new Entity.Tag { Text = "Backend", Url = "Backend", Color = Entity.TagColors.info },
+                        new Entity.Tag { Text = "Frontend", Url = "Frontend", Color = Entity.TagColors.success },
+                        new Entity.Tag { Text = "Fullstack", Url = "Fullstack", Color = Entity.TagColors.secondary },
+                        new Entity.Tag { Text = "php", Url = "php", Color = Entity.TagColors.primary }
                      );
                     context.SaveChanges();
                 }
             }
+
             if (!context.Users.Any())
             {
                 context.Users.AddRange(
-                    new Entity.User {UserName="mustafaalmaz" } ,
-                    new Entity.User {UserName="tedesco" } 
+                    new Entity.User { UserName = "mustafaalmaz", Image = "Kırpıldı.png" },
+                    new Entity.User { UserName = "Kerem_1907", Image = "kerem.png" }
                 );
                 context.SaveChanges();
             }
@@ -46,7 +49,11 @@ namespace BlogApp.Data.Concrete.EfCore
                         PublishedOn = DateTime.Now.AddDays(-10),
                         Tags = context.Tags.Take(4).ToList(),
                         Image = "1.png",
-                        UserId = 1
+                        UserId = 1,
+                        Comments = new List<Comment> {
+                        new Comment{Text = "iyi bir kurs ama daha da iyileştirilebilir 6/10" , PublishedOn = new DateTime() ,UserId = 1},
+                        new Comment {Text = "Kursun Teknik Detayları Çok Fazla ve Bu Kalite Hoşuma Gitti :)" , PublishedOn = new DateTime().AddHours(14) ,UserId = 2}
+                        }
                     },
                     new Entity.Post
                     {

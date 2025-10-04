@@ -1,15 +1,63 @@
 ﻿@model Post
 
-<div class="row" >
+<div class="row">
     <div class="col-lg-8">
         <div class="bg-white p-4">
-           <h1 class="h4 mb-4">@Model.Title</h1>
-           <div class="tags">
+            <h1 class="h4 mb-4">@Model.Title</h1>
+            <div class="tags">
+                @foreach (var item in Model.Tags)
+                {
+                    <a href="/posts/tag/@item.Url" class="badge bg-@item.Color bg-opacity-10 text-@item.Color mb-3 fw-bold ">@item.Text</a>
+                }
+            </div>
+            <div class="tags">
                 <a href="#" class="badge bg-primary bg-opacity-10 text-danger mb-3 fw-bold"></a>
                 <a href="#" class="badge bg-primary bg-opacity-10 text-danger mb-3 fw-bold"></a>
-           </div>
-           <img src="~/img/@Model.Image" class="img-fluid rounded" alt="resim yüklenemedi"/>
-           <div>@Model.Content</div>
+            </div>
+            <img src="~/img/@Model.Image" class="img-fluid rounded" alt="resim yüklenemedi" />
+            <div>@Model.Content</div>
+        </div>
+        <div class="bg-white mt-3">
+            <div class="card border-0">
+                <div class="card-header pb-0">
+                    <h4>@Model.Comments.Count() adet yorum </h4>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.Comments)
+                    {
+                        <div class=" my-4 display-flex">
+                            <div class="">
+                                <img src="/img/@item.User.Image" class="avatar rounded-circle float-start me-3" />
+                            </div>
+                            <div class="mb-2">
+                                <h6>@item.User.UserName</h6>
+                                <span>@item.PublishedOn</span>
+                            </div>
+                            <p>@item.Text</p>
+                        </div>
+                        <hr class="my-4"/>
+                    }
+                    <div>
+                        <h4>
+                            Yorum Ekle
+                        </h4>
+                        <form action="AddComment" method="post">
+                            <input type="hidden" asp-for="PostId" />
+                            <div class="mb-3">
+                                <label asp-for="@Model.User.UserName" class="form-label">UserName</label>
+                                <input type="text" asp-for="@Model.User.UserName" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="Text" class="form-label">Yorum</label>
+                                <textarea rows="3" type="text" name="Text" id="Text" class="form-control" ></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Yorum Ekle</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-lg-4">

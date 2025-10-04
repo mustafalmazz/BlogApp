@@ -11,7 +11,7 @@ namespace BlogApp.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
-        public PostsController(IPostRepository repository, ITagRepository tagRepository)
+        public PostsController(IPostRepository repository,ITagRepository tagRepository)
         {
             _postRepository = repository;
             _tagRepository = tagRepository;
@@ -28,9 +28,13 @@ namespace BlogApp.Controllers
             return View(new PostViewModel { Posts = await posts.ToListAsync() });
         }
 
-        public async Task<IActionResult> DetailsAsync(/*int id*/ string url)
+        public async Task<IActionResult> Details(/*int id*/ string url)
         {
-            var model = await _postRepository.Posts.FirstOrDefaultAsync(a=>a.Url == url);
+            var model = await _postRepository.Posts
+                .Include(x => x.Tags)
+                .Include(x=>x.Comments)
+                .ThenInclude(x => x.User)
+                .FirstOrDefaultAsync(a=>a.Url == url);
             return View(model);
         }
     }
