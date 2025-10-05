@@ -29,9 +29,9 @@
                             <div class="">
                                 <img src="/img/@item.User.Image" class="avatar rounded-circle float-start me-3" />
                             </div>
-                            <div class="mb-2">
-                                <h6>@item.User.UserName</h6>
-                                <span>@item.PublishedOn</span>
+                            <div class="mb-2 d-flex">
+                                <h6 class="me-2">@item.User.UserName</h6>
+                                <small>@item.PublishedOn.ToString("G")</small>
                             </div>
                             <p>@item.Text</p>
                         </div>
@@ -41,12 +41,14 @@
                         <h4>
                             Yorum Ekle
                         </h4>
-                        <form action="AddComment" method="post">
-                            <input type="hidden" asp-for="PostId" />
+                        <form asp-controller="Posts" asp-action="AddComment" method="post">
+                            <input type="hidden" name="PostId" value="@Model.PostId" />
+                            <input type="hidden" name="Url" value="@Model.Url"/>
                             <div class="mb-3">
-                                <label asp-for="@Model.User.UserName" class="form-label">UserName</label>
-                                <input type="text" asp-for="@Model.User.UserName" class="form-control" />
+                                <label for="UserName" class="form-label">UserName</label>
+                                <input type="text" name="UserName" id="UserName" class="form-control" />
                             </div>
+
                             <div class="mb-3">
                                 <label for="Text" class="form-label">Yorum</label>
                                 <textarea rows="3" type="text" name="Text" id="Text" class="form-control" ></textarea>

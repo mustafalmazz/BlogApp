@@ -51,8 +51,8 @@ namespace BlogApp.Data.Concrete.EfCore
                         Image = "1.png",
                         UserId = 1,
                         Comments = new List<Comment> {
-                        new Comment{Text = "iyi bir kurs ama daha da iyileştirilebilir 6/10" , PublishedOn = new DateTime() ,UserId = 1},
-                        new Comment {Text = "Kursun Teknik Detayları Çok Fazla ve Bu Kalite Hoşuma Gitti :)" , PublishedOn = new DateTime().AddHours(14) ,UserId = 2}
+                        new Comment{Text = "iyi bir kurs ama daha da iyileştirilebilir 6/10" , PublishedOn = DateTime.Now.AddDays(-20) ,UserId = 1},
+                        new Comment {Text = "Kursun Teknik Detayları Çok Fazla ve Bu Kalite Hoşuma Gitti :)" , PublishedOn = DateTime.Now.AddDays(-10).AddHours(14) ,UserId = 2}
                         }
                     },
                     new Entity.Post

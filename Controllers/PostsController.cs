@@ -1,6 +1,6 @@
-﻿using BlogApp.Data;
-using BlogApp.Data.Abstract;
+﻿using BlogApp.Data.Abstract;
 using BlogApp.Data.Concrete.EfCore;
+using BlogApp.Entity;
 using BlogApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +11,12 @@ namespace BlogApp.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
-        public PostsController(IPostRepository repository,ITagRepository tagRepository)
+        private readonly ICommentRepository _commentRepository;
+        public PostsController(IPostRepository repository,ITagRepository tagRepository ,ICommentRepository commentRepository)
         {
             _postRepository = repository;
             _tagRepository = tagRepository;
+            _commentRepository = commentRepository;
         }
         public async Task<IActionResult> Index(string tagName)
         {
@@ -36,6 +38,18 @@ namespace BlogApp.Controllers
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(a=>a.Url == url);
             return View(model);
+        }
+        public IActionResult AddComment(int PostId,string UserName , string Text,string Url)
+        {
+            var entity = new Comment
+            {
+                PostId = PostId,
+                Text = Text,
+                PublishedOn = DateTime.Now,
+                User = new User {UserName = UserName ,Image = "smile.png"}
+            };
+            _commentRepository.CreateComment(entity);
+            return Redirect("/posts/details/" + Url);
         }
     }
 }

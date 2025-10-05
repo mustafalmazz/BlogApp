@@ -1,4 +1,3 @@
-using BlogApp.Data;
 using BlogApp.Data.Abstract;
 using BlogApp.Data.Concrete.EfCore;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +19,10 @@ namespace BlogApp
                 var connectionString = config.GetConnectionString("sql_connection");
                 options.UseSqlite(connectionString);
             });
+
             builder.Services.AddScoped<IPostRepository,EfPostRepository>();
             builder.Services.AddScoped<ITagRepository,EfTagRepository>();
+            builder.Services.AddScoped<ICommentRepository,EfCommentRepository>();
 
             var app = builder.Build();
             SeedData.TestVerileriniDoldur(app);
