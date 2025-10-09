@@ -20,30 +20,34 @@
         <div class="bg-white mt-3">
             <div class="card border-0">
                 <div class="card-header pb-0">
-                    <h4>@Model.Comments.Count() adet yorum </h4>
+                    <h4><span id="commentCount">@Model.Comments.Count() adet yorum</span> </h4>
                 </div>
                 <div class="card-body">
-                    @foreach (var item in Model.Comments)
-                    {
-                        <div class=" my-4 display-flex">
-                            <div class="">
+                    <div id="comments">
+                        @foreach (var item in Model.Comments)
+                        {
+                            <div class=" my-4 d-flex">
                                 <img src="/img/@item.User.Image" class="avatar rounded-circle float-start me-3" />
+                                <div>
+                                    <div class="mb-2 d-flex">
+                                        <h6 class="me-2">@item.User.UserName</h6>
+                                        <small>@item.PublishedOn.ToString("G")</small>
+                                    </div>
+                                    <p>@item.Text</p>
+                                </div>
                             </div>
-                            <div class="mb-2 d-flex">
-                                <h6 class="me-2">@item.User.UserName</h6>
-                                <small>@item.PublishedOn.ToString("G")</small>
-                            </div>
-                            <p>@item.Text</p>
-                        </div>
-                        <hr class="my-4"/>
-                    }
+                            <hr class="my-4" />
+                        }
+
+                    </div>
+
                     <div>
                         <h4>
                             Yorum Ekle
                         </h4>
                         <form asp-controller="Posts" asp-action="AddComment" method="post">
-                            <input type="hidden" name="PostId" value="@Model.PostId" />
-                            <input type="hidden" name="Url" value="@Model.Url"/>
+                            <input type="hidden" id="PostId" name="PostId" value="@Model.PostId" />
+                            <input type="hidden" id="Url" name="Url" value="@Model.Url" />
                             <div class="mb-3">
                                 <label for="UserName" class="form-label">UserName</label>
                                 <input type="text" name="UserName" id="UserName" class="form-control" />
@@ -51,10 +55,10 @@
 
                             <div class="mb-3">
                                 <label for="Text" class="form-label">Yorum</label>
-                                <textarea rows="3" type="text" name="Text" id="Text" class="form-control" ></textarea>
+                                <textarea rows="3" type="text" name="Text" id="Text" class="form-control"></textarea>
                             </div>
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Yorum Ekle</button>
+                                <button id="btnYorumKayit" type="submit" class="btn btn-primary">Yorum Ekle</button>
                             </div>
                         </form>
                     </div>
@@ -67,3 +71,53 @@
         @await Component.InvokeAsync("NewPosts")
     </div>
 </div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#btnYorumKayit").click(function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    type:'POST',
+                    url:'@Url.Action("AddComment")',
+                    dataType:'json',
+                    data:{
+                        PostId : $('#PostId').val(),
+                        UserName : $('#UserName').val(),
+                        Text : $('#Text').val(),
+                        Url: $('#Url').val()
+                    },
+                    success: function(yorum){
+                        $("#comments").append(`
+                            <div class="my-4 d-flex">
+                                <img src="/img/${yorum.image}" class="avatar rounded-circle float-start me-3" />
+                                <div>
+                                    <div class="mb-2 d-flex">
+                                        <h6 class="me-2">${yorum.userName}</h6>
+                                        <small>${new Date(yorum.publishedOn).toLocaleString()}</small>
+                                    </div>
+                                    <p>${yorum.text}</p>
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                        `);
+
+                       
+                        $("#UserName").val('');
+                        $("#Text").val('');
+
+                        
+                        var text = $("#commentCount").text(); 
+                        var number = parseInt(text);
+                        if (!isNaN(number)) {
+                            $("#commentCount").text((number + 1) + " adet yorum");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+}

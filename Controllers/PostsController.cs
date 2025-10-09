@@ -39,7 +39,7 @@ namespace BlogApp.Controllers
                 .FirstOrDefaultAsync(a=>a.Url == url);
             return View(model);
         }
-        public IActionResult AddComment(int PostId,string UserName , string Text,string Url)
+        public JsonResult AddComment(int PostId,string UserName , string Text,string Url)
         {
             var entity = new Comment
             {
@@ -49,7 +49,15 @@ namespace BlogApp.Controllers
                 User = new User {UserName = UserName ,Image = "smile.png"}
             };
             _commentRepository.CreateComment(entity);
-            return Redirect("/posts/details/" + Url);
+            //return Redirect("/posts/details/" + Url);
+            return Json(new
+            {
+                UserName ,
+                Text,
+                entity.PublishedOn,
+                entity.User.Image
+
+            });
         }
     }
 }
