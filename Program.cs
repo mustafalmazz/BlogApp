@@ -1,7 +1,9 @@
 using BlogApp.Data.Abstract;
 using BlogApp.Data.Concrete.EfCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-
+//Authatnication kullanýcýyý giriþ yaparken tanýmlamak için kullanýlýr.
+//Authorization ise kullanýcýnýn eriþim yetkisini belirler.
 namespace BlogApp
 {
     public class Program
@@ -19,10 +21,12 @@ namespace BlogApp
                 var connectionString = config.GetConnectionString("sql_connection");
                 options.UseSqlite(connectionString);
             });
-
+             
             builder.Services.AddScoped<IPostRepository,EfPostRepository>();
             builder.Services.AddScoped<ITagRepository,EfTagRepository>();
             builder.Services.AddScoped<ICommentRepository,EfCommentRepository>();
+            builder.Services.AddScoped<IUserRepository,EfUserRepository>();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             var app = builder.Build();
             SeedData.TestVerileriniDoldur(app);
@@ -36,9 +40,12 @@ namespace BlogApp
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
