@@ -1,0 +1,69 @@
+﻿@model PostCreateViewModel   
+
+<div class="row">
+    <div class="col-12">
+        <div class="bg-white p-4">
+            <h1 class="text-center">Post Edit Page</h1>
+            <hr />
+            <form action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="PostId" />
+                <input type="hidden" asp-for="Image" />
+                <div class="mb-3">
+                    <label class="form-label">Mevcut Resim</label><br />
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="/img/@Model.Image" width="200" alt="Mevcut Resim" class="rounded shadow" />
+                    }
+                    else
+                    {
+                        <p class="text-muted">Henüz resim yüklenmemiş.</p>
+                    }
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Url" class="form-label"></label>
+                    <input asp-for="Url" class="form-control" />
+                    <span asp-validation-for="Url" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label"></label>
+                    <textarea asp-for="Content" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                @if (User.FindFirstValue(ClaimTypes.Role) == "admin")
+                {
+                    <div class="form-check mb-3">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label" >Aktif ?</label>
+                    </div>
+                }
+                <button class="btn btn-primary" type="submit">Kaydet</button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.tiny.cloud/1/c5u5x88k3lzpefkd8u4q92aovj6ck9gh0onm6yj7bjq271yt/tinymce/8/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#Content',
+            menubar: false, 
+            plugins: 'link image lists code',
+            toolbar: 'undo redo | bold italic underline | bullist numlist | link image | code',
+            height: 300,
+            branding: false 
+        });
+    </script>
+}

@@ -44,6 +44,7 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "asp .net core",
                         Content = "asp .net core dersleri",
+                        Description = "asp .net core dersleri",
                         Url = "asp-net-core",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-10),
@@ -59,6 +60,7 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "Java",
                         Content = "Java dersleri",
+                        Description = "Java dersleri",
                         Url = "Java",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-20),
@@ -70,6 +72,7 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "React.js",
                         Content = "React.js dersleri",
+                        Description = "React.js dersleri",
                         Url = "react.js",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),
@@ -81,6 +84,7 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "MongoDb",
                         Content = "MongoDb dersleri",
+                        Description = "MongoDb dersleri",
                         Url = "mongodb",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),
@@ -92,6 +96,7 @@ namespace BlogApp.Data.Concrete.EfCore
                     {
                         Title = "Angular",
                         Content = "Angular dersleri",
+                        Description = "Angular dersleri",
                         Url = "angular",
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),

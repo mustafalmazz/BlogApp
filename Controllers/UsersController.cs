@@ -1,9 +1,12 @@
 ﻿using BlogApp.Data.Abstract;
 using BlogApp.Models;
+using BlogApp.Entity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+
 
 namespace BlogApp.Controllers
 {
@@ -19,11 +22,31 @@ namespace BlogApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("Login");
+                var user = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserName == model.UserName || u.Email == model.Email);
+                if (user == null)
+                {
+                    _userRepository.CreateUser(
+                    new User
+                    {
+                        UserName = model.UserName,
+                        Name = model.Name,
+                        Email = model.Email,
+                        Password = model.Password,
+                        Image = "smile.png"
+                    }    
+                    );
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Kullanıcı Adı veya Eposta Kayıtlı!");
+                }
+
+               
             }
             return View(model);
         }
@@ -55,7 +78,7 @@ namespace BlogApp.Controllers
                     userClaims.Add(new Claim(ClaimTypes.GivenName, IsUser.Name ?? ""));
                     userClaims.Add(new Claim(ClaimTypes.UserData, IsUser.Image ?? ""));
 
-                    if (IsUser.Email == "mustafalmazz@gmail.com")
+                    if (IsUser.Email == "admin@gmail.com")
                     {
                         userClaims.Add(new Claim(ClaimTypes.Role, "admin"));
                     }
@@ -77,6 +100,20 @@ namespace BlogApp.Controllers
             }
 
             return View(model);
+        }
+        public IActionResult Profile(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                return NotFound();
+            }
+            var user = _userRepository.Users.Include(u => u.Posts).Include(u => u.Comments).ThenInclude(u=>u.Post).FirstOrDefault(u => u.UserName == username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
     }
 }
