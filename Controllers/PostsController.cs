@@ -118,11 +118,12 @@ namespace BlogApp.Controllers
             {
                 return NotFound();
             }
-            var post = _postRepository.Posts.FirstOrDefault(i => i.PostId == id);
+            var post = _postRepository.Posts.Include(a=>a.Tags).FirstOrDefault(i => i.PostId == id);
             if (post == null)
             {
                 return NotFound();
             }
+            ViewBag.Tags = _tagRepository.Tags.ToList();  
             var model = new PostCreateViewModel
             {
                 PostId = post.PostId,
@@ -131,15 +132,17 @@ namespace BlogApp.Controllers
                 Content = post.Content,
                 Description = post.Description,
                 Url = post.Url,
-                Image = post.Image
+                Image = post.Image,
+                Tags = post.Tags
 
             };
 
             return View(model);
         }
+
         [Authorize]
         [HttpPost]
-        public IActionResult Edit(PostCreateViewModel model)
+        public IActionResult Edit(PostCreateViewModel model, int[] tagIds)
         {
             if (ModelState.IsValid)
             {
@@ -156,9 +159,10 @@ namespace BlogApp.Controllers
                 {
                     entity.IsActive = model.IsActive;
                 }
-                _postRepository.EditPost(entity);
+                _postRepository.EditPost(entity,tagIds);
                 return RedirectToAction("List");
             }
+            ViewBag.Tags = _tagRepository.Tags.ToList();
             return View(model);
 
         }
