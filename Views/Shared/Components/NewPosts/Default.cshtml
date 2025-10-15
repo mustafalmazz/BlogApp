@@ -1,15 +1,226 @@
 ﻿@model List<Post>
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h5 class="card-title mb-0">New Posts</h5>
+<style>
+    .newposts-widget {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .newposts-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #f8f9fa;
+        position: relative;
+    }
+
+        .newposts-header:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+    .newposts-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .newposts-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0;
+    }
+
+    .newposts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .newpost-item {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border-left: 4px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .newpost-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .newpost-item:hover {
+            background: white;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+            transform: translateX(5px);
+        }
+
+            .newpost-item:hover:before {
+                transform: scaleY(1);
+            }
+
+    .newpost-number {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+
+    .newpost-item:hover .newpost-number {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .newpost-content {
+        padding-right: 35px;
+    }
+
+    .newpost-link {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        text-decoration: none;
+        line-height: 1.5;
+        display: block;
+        transition: color 0.3s ease;
+    }
+
+        .newpost-link:hover {
+            color: #667eea;
+        }
+
+    .newpost-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        font-size: 0.7rem;
+        margin-right: 8px;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
+    }
+
+    .newpost-item:hover .newpost-icon {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Alternatif renk varyasyonları */
+    .newpost-item:nth-child(odd) {
+        background: #f0f4ff;
+    }
+
+    .newpost-item:nth-child(1) .newpost-number {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .newpost-item:nth-child(2) .newpost-number {
+        background: linear-gradient(135deg, #764ba2, #667eea);
+    }
+
+    .newpost-item:nth-child(3) .newpost-number {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .newpost-item:nth-child(4) .newpost-number {
+        background: linear-gradient(135deg, #764ba2, #667eea);
+    }
+
+    .newpost-item:nth-child(5) .newpost-number {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    @@media (max-width: 768px) {
+        .newposts-widget
+
+    {
+        padding: 20px;
+    }
+
+    .newposts-title {
+        font-size: 1.3rem;
+    }
+
+    .newpost-item {
+        padding: 12px;
+    }
+
+    .newpost-link {
+        font-size: 0.9rem;
+    }
+
+    .newpost-number {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+    }
+
+    }
+</style>
+
+<div class="newposts-widget">
+    <div class="newposts-header">
+        <div class="newposts-icon">
+            <i class="bi bi-star-fill"></i>
         </div>
-        <div class="card-body">
-            @foreach (var item in Model)
+        <h5 class="newposts-title">Yeni Kurslar</h5>
+    </div>
+    <div class="newposts-list">
+        @for (int i = 0; i < Model.Count; i++)
         {
-            <div class="mb-3">
-                <h6 class="mb-0"><a href="/posts/details/@item.Url">@item.Title</a> </h6>
+            var item = Model[i];
+            <div class="newpost-item">
+                <div class="newpost-number">@(i + 1)</div>
+                <div class="newpost-content">
+                    <a href="/posts/details/@item.Url" class="newpost-link">
+                        <i class="bi bi-arrow-right-circle-fill newpost-icon"></i>@item.Title
+                    </a>
+                </div>
             </div>
         }
-        </div>
+    </div>
 </div>

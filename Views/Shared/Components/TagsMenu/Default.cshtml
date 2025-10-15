@@ -1,16 +1,202 @@
 ﻿@model List<Tag>
-<div class="card mb-3">
-    <div class="card-header">
-        <h5 class="cart-title mb-0">Tags</h5>
-    </div>
-    <div class="card-body">
-        <ul class="list-inline d-flex flex-wrap gap-2">
-            @foreach (var item in Model)
-            {
-                <li class="list-inline-item">
-                    <a href="/posts/tag/@item.Url" class=" btn btn-outline-secondary btn-sm">#@item.Text</a>
-                </li>
+
+<style>
+    .tags-widget {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .tags-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #f8f9fa;
+        position: relative;
+    }
+
+        .tags-header:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+    .tags-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .tags-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0;
+    }
+
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .tag-item {
+        display: inline-block;
+    }
+
+    .tag-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: 2px solid #f8f9fa;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .tag-link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: left 0.3s ease;
+            z-index: 0;
+        }
+
+        .tag-link span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag-link:hover {
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+            .tag-link:hover:before {
+                left: 0;
             }
-        </ul>
+
+    .tag-hash {
+        font-weight: 700;
+        margin-right: 2px;
+    }
+
+    /* Alternatif renkler için */
+    .tag-item:nth-child(6n+1) .tag-link {
+        background: #fff5f5;
+        color: #e53e3e;
+        border-color: #fff5f5;
+    }
+
+        .tag-item:nth-child(6n+1) .tag-link:hover {
+            border-color: #e53e3e;
+        }
+
+    .tag-item:nth-child(6n+2) .tag-link {
+        background: #fff5e6;
+        color: #dd6b20;
+        border-color: #fff5e6;
+    }
+
+        .tag-item:nth-child(6n+2) .tag-link:hover {
+            border-color: #dd6b20;
+        }
+
+    .tag-item:nth-child(6n+3) .tag-link {
+        background: #f0fff4;
+        color: #38a169;
+        border-color: #f0fff4;
+    }
+
+        .tag-item:nth-child(6n+3) .tag-link:hover {
+            border-color: #38a169;
+        }
+
+    .tag-item:nth-child(6n+4) .tag-link {
+        background: #e6fffa;
+        color: #319795;
+        border-color: #e6fffa;
+    }
+
+        .tag-item:nth-child(6n+4) .tag-link:hover {
+            border-color: #319795;
+        }
+
+    .tag-item:nth-child(6n+5) .tag-link {
+        background: #ebf4ff;
+        color: #3182ce;
+        border-color: #ebf4ff;
+    }
+
+        .tag-item:nth-child(6n+5) .tag-link:hover {
+            border-color: #3182ce;
+        }
+
+    @@media (max-width: 768px) {
+        .tags-widget
+
+    {
+        padding: 20px;
+    }
+
+    .tags-title {
+        font-size: 1.3rem;
+    }
+
+    .tags-container {
+        gap: 8px;
+    }
+
+    .tag-link {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    }
+</style>
+
+<div class="tags-widget">
+    <div class="tags-header">
+        <div class="tags-icon">
+            <i class="bi bi-tags-fill"></i>
+        </div>
+        <h5 class="tags-title">Etiketler</h5>
+    </div>
+    <div class="tags-container">
+        @foreach (var item in Model)
+        {
+            <div class="tag-item">
+                <a href="/posts/tag/@item.Url" class="tag-link">
+                    <span><span class="tag-hash">#</span>@item.Text</span>
+                </a>
+            </div>
+        }
     </div>
 </div>

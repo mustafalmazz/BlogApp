@@ -35,21 +35,17 @@ namespace BlogApp.Data.Concrete.EfCore
         }
         public void EditPost(Post post, int[] tagIds)
         {
-            var model = _context.Posts.Include(i => i.Tags).FirstOrDefault(i => i.PostId == post.PostId);
-            if (model != null)
-            {
-                model.Title = post.Title;
-                model.Content = post.Content;
-                model.Description = post.Description;
-                model.Image = post.Image;
-                model.IsActive = post.IsActive;
-                model.PublishedOn = post.PublishedOn;
-                model.Url = post.Url;
+            var entity = _context.Posts.Include(i => i.Tags).FirstOrDefault(i => i.PostId == post.PostId);
 
-                model.Tags.Clear();
-                var selectedTags = _context.Tags.Where(t => tagIds.Contains(t.TagId)).ToList();
-                foreach (var tag in selectedTags)
-                    model.Tags.Add(tag);
+            if (entity != null)
+            {
+                entity.Title = post.Title;
+                entity.Description = post.Description;
+                entity.Content = post.Content;
+                entity.Url = post.Url;
+                entity.IsActive = post.IsActive;
+
+                entity.Tags = _context.Tags.Where(tag => tagIds.Contains(tag.TagId)).ToList();
 
                 _context.SaveChanges();
             }

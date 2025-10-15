@@ -118,26 +118,24 @@ namespace BlogApp.Controllers
             {
                 return NotFound();
             }
-            var post = _postRepository.Posts.Include(a=>a.Tags).FirstOrDefault(i => i.PostId == id);
+            var post = _postRepository.Posts.Include(i => i.Tags).FirstOrDefault(i => i.PostId == id);
             if (post == null)
             {
                 return NotFound();
             }
-            ViewBag.Tags = _tagRepository.Tags.ToList();  
-            var model = new PostCreateViewModel
+
+            ViewBag.Tags = _tagRepository.Tags.ToList();
+
+            return View(new PostCreateViewModel
             {
                 PostId = post.PostId,
-                IsActive = post.IsActive,
                 Title = post.Title,
-                Content = post.Content,
                 Description = post.Description,
+                Content = post.Content,
                 Url = post.Url,
-                Image = post.Image,
+                IsActive = post.IsActive,
                 Tags = post.Tags
-
-            };
-
-            return View(model);
+            });
         }
 
         [Authorize]
@@ -146,25 +144,25 @@ namespace BlogApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = new Post
+                var entityToUpdate = new Post
                 {
                     PostId = model.PostId,
                     Title = model.Title,
-                    Content = model.Content,
                     Description = model.Description,
-                    Url = model.Url,
-                    Image = model.Image
+                    Content = model.Content,
+                    Url = model.Url
                 };
+
                 if (User.FindFirstValue(ClaimTypes.Role) == "admin")
                 {
-                    entity.IsActive = model.IsActive;
+                    entityToUpdate.IsActive = model.IsActive;
                 }
-                _postRepository.EditPost(entity,tagIds);
+
+                _postRepository.EditPost(entityToUpdate, tagIds);
                 return RedirectToAction("List");
             }
             ViewBag.Tags = _tagRepository.Tags.ToList();
             return View(model);
-
         }
     }
 }
