@@ -1,34 +1,468 @@
 ﻿@model List<Post>
 
-    <div class="row">
-        <div class="col-12">
-            <h2 class="text-center">Post List</h2>
-            <hr />
-        <a href="/Users/Create" class="btn btn-primary mb-2"><i class="bi bi-plus-circle"></i> New Post</a>
-            
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th style="width:200px;">Image</th>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th style="width:125px;"></th>
-                </tr>
-                </thead>
-               <tbody>
-                 @foreach (var item in Model)
-                {
-                    <tr>
-                        <td><img src="/img/@item.Image" class="img-fluid" alt="" /></td>
-                        <td>@item.Title</td>
-                        <td>@item.IsActive</td>
-                        <td>
-                            <a href="/posts/edit/@item.PostId" class="btn btn-sm btn-primary">Edit</a>
-                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                    </tr>
+<style>
+    .admin-container {
+        padding: 40px 0;
+    }
+
+    .admin-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .admin-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 15px;
+    }
+
+    .title-divider {
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, #ffff);
+        margin: 0 auto;
+        border-radius: 2px;
+    }
+
+    .admin-content {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .btn-new-post {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-new-post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+    .search-box {
+        position: relative;
+        flex: 0 1 300px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px 15px 10px 40px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+    }
+
+    .posts-table-wrapper {
+        overflow-x: auto;
+        border-radius: 15px;
+    }
+
+    .posts-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+
+        .posts-table thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+            .posts-table thead th {
+                padding: 18px 20px;
+                text-align: left;
+                font-weight: 700;
+                color: white;
+                font-size: 0.95rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border: none;
+            }
+
+                .posts-table thead th:first-child {
+                    border-top-left-radius: 15px;
                 }
-               </tbody>
-            </table>
+
+                .posts-table thead th:last-child {
+                    border-top-right-radius: 15px;
+                    text-align: center;
+                }
+
+        .posts-table tbody tr {
+            background: white;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+            .posts-table tbody tr:hover {
+                background: #f8f9fa;
+                transform: scale(1.01);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            }
+
+            .posts-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .posts-table tbody td {
+            padding: 20px;
+            vertical-align: middle;
+            color: #2d3748;
+        }
+
+    .post-image-cell {
+        width: 150px;
+    }
+
+    .post-thumbnail {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .post-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+    .post-id {
+        font-weight: 600;
+        color: #667eea;
+        font-size: 0.9rem;
+    }
+
+    .post-title-cell {
+        font-weight: 600;
+        color: #2d3748;
+        max-width: 400px;
+    }
+
+    .post-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .actions-cell {
+        text-align: center;
+        width: 180px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-edit {
+        background: #4299e1;
+        color: white;
+    }
+
+        .btn-edit:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+            color: white;
+        }
+
+    .btn-delete {
+        background: #f56565;
+        color: white;
+    }
+
+        .btn-delete:hover {
+            background: #e53e3e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 101, 101, 0.4);
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #cbd5e0;
+        margin-bottom: 20px;
+    }
+
+    .empty-text {
+        color: #718096;
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+    }
+
+    .table-footer {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .total-count {
+        color: #718096;
+        font-weight: 600;
+    }
+
+    .total-number {
+        color: #667eea;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .admin-content
+
+    {
+        padding: 25px 15px;
+    }
+
+    .admin-title {
+        font-size: 1.8rem;
+    }
+
+    .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        flex: 1 1 100%;
+    }
+
+    .posts-table thead {
+        display: none;
+    }
+
+    .posts-table tbody tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 15px;
+    }
+
+    .posts-table tbody td {
+        display: block;
+        padding: 10px 0;
+        border: none;
+    }
+
+    .post-image-cell,
+    .actions-cell {
+        width: 100%;
+    }
+
+    .post-thumbnail {
+        width: 100%;
+        height: 200px;
+    }
+
+    .action-buttons {
+        justify-content: flex-start;
+    }
+
+    }
+</style>
+
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="admin-header">
+            <h1 class="admin-title">Post Yönetimi</h1>
+            <div class="title-divider"></div>
+        </div>
+
+        <div class="admin-content">
+            <div class="action-bar">
+                <a href="/posts/create" class="btn-new-post">
+                    <i class="bi bi-plus-circle"></i>
+                    Yeni Post Ekle
+                </a>
+
+                <div class="search-box">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Post ara..." id="searchInput">
+                </div>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="posts-table-wrapper">
+                    <table class="posts-table">
+                        <thead>
+                            <tr>
+                                <th>Görsel</th>
+                                <th>Başlık</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="postsTableBody">
+                            @foreach (var item in Model)
+                            {
+                                <tr class="post-row">
+                                    <td class="post-image-cell">
+                                        <img src="/img/@item.Image" class="post-thumbnail" alt="@item.Title" />
+                                    </td>
+                                    <td class="post-title-cell" data-title="@item.Title">
+                                        <div>@item.Title</div>
+                                        <small class="post-id">#@item.PostId</small>
+                                    </td>
+                                    <td>
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="post-status status-active">
+                                                <i class="bi bi-check-circle-fill"></i>
+                                                Aktif
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="post-status status-inactive">
+                                                <i class="bi bi-x-circle-fill"></i>
+                                                Pasif
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="action-buttons">
+                                            <a href="/posts/edit/@item.PostId" class="btn-action btn-edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                                Düzenle
+                                            </a>
+                                            <button class="btn-action btn-delete" onclick="confirmDelete(@item.PostId)">
+                                                <i class="bi bi-trash"></i>
+                                                Sil
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    <div class="total-count">
+                        Toplam <span class="total-number">@Model.Count</span> post
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-inbox"></i>
+                    </div>
+                    <div class="empty-text">Henüz hiç post eklenmemiş</div>
+                    <a href="/posts/create" class="btn-new-post">
+                        <i class="bi bi-plus-circle"></i>
+                        İlk Post'u Ekle
+                    </a>
+                </div>
+            }
         </div>
     </div>
+</div>
+
+<script>
+    // Arama fonksiyonu
+    document.getElementById('searchInput')?.addEventListener('keyup', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.post-row');
+
+        rows.forEach(row => {
+            const title = row.querySelector('.post-title-cell').getAttribute('data-title').toLowerCase();
+            if (title.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Silme onayı fonksiyonu
+    function confirmDelete(postId) {
+        if (confirm('Bu post\'u silmek istediğinizden emin misiniz?')) {
+            // Silme işlemi için endpoint'e yönlendirme
+            window.location.href = `/posts/delete/${postId}`;
+        }
+    }
+</script>

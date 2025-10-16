@@ -49,7 +49,7 @@ namespace BlogApp.Data.Concrete.EfCore
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-10),
                         Tags = context.Tags.Take(4).ToList(),
-                        Image = "1.png",
+                        Image = "Dotnet.png",
                         UserId = 1,
                         Comments = new List<Comment> {
                         new Comment{Text = "iyi bir kurs ama daha da iyileştirilebilir 6/10" , PublishedOn = DateTime.Now.AddDays(-20) ,UserId = 1},
@@ -65,7 +65,7 @@ namespace BlogApp.Data.Concrete.EfCore
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-20),
                         Tags = context.Tags.Take(4).ToList(),
-                        Image = "2.jpg",
+                        Image = "java.jpg",
                         UserId = 1
                     },
                     new Entity.Post
@@ -77,7 +77,7 @@ namespace BlogApp.Data.Concrete.EfCore
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),
                         Tags = context.Tags.Take(4).ToList(),
-                        Image = "3.jpg",
+                        Image = "react.jpg",
                         UserId = 1
                     },
                     new Entity.Post
@@ -89,7 +89,7 @@ namespace BlogApp.Data.Concrete.EfCore
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),
                         Tags = context.Tags.Take(4).ToList(),
-                        Image = "3.jpg",
+                        Image = "mongo.png",
                         UserId = 1
                     },
                     new Entity.Post
@@ -101,7 +101,7 @@ namespace BlogApp.Data.Concrete.EfCore
                         IsActive = true,
                         PublishedOn = DateTime.Now.AddDays(-5),
                         Tags = context.Tags.Take(4).ToList(),
-                        Image = "3.jpg",
+                        Image = "angular.jpg",
                         UserId = 1
                     }
                );
